@@ -72,6 +72,50 @@ class SiriProxy::Plugin::Example < SiriProxy::Plugin
     
     request_completed #always complete your request! Otherwise the phone will "spin" at the user!
   end
+
+  listen_for /start/i do
+    MAX_NUMBER = 100
+    max = MAX_NUMBER
+    min = 1
+    count = 1
+    answer = Random.rand(MAX_NUMBER)
+    persons = ask "How many persons?"
+
+    say "OK, start the game with #{persons} persons, answer: #{answer}"
+
+    begin
+
+        number = ask "Number #{count}, say a number, from #{min} to #{max}"
+        if number.to_i > answer
+            max = number.to_i
+            if (max - min) == 2
+                say "Another one guess the number #{answer}!"
+                break
+            end
+            say "#{number}, it's too high"
+        elsif number.to_i < answer
+            min = number.to_i
+            if (max - min) == 2
+                say "Another one guess the number #{answer}!"
+                break
+            end
+            say "#{number}, it's too low"
+        elsif number.to_i == answer
+            say "You guess the number #{answer}!"
+            break
+        end
+
+        count += 1
+        if count > persons.to_i
+            count = 1
+        end
+
+    end while true
+
+    request_completed
+  end
+
+    
   
   #demonstrate injection of more complex objects without shortcut methods.
   listen_for /test map/i do
