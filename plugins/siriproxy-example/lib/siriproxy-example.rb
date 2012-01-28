@@ -81,20 +81,24 @@ class SiriProxy::Plugin::Example < SiriProxy::Plugin
     answer = Random.rand(MAX_NUMBER)
     persons = ask "How many persons?"
 
-    say "OK, start the game with #{persons} persons, answer: #{answer}"
+    say "OK, start the game with #{persons} persons"
 
     begin
 
         number = ask "Number #{count}, say a number, from #{min} to #{max}"
         if number.to_i > answer
-            max = number.to_i
+            if (number.to_i < max)
+                max = number.to_i
+            end
             if (max - min) == 2
                 say "Another one guess the number #{answer}!"
                 break
             end
             say "#{number}, it's too high"
         elsif number.to_i < answer
-            min = number.to_i
+            if (number.to_i > min)
+                min = number.to_i
+            end
             if (max - min) == 2
                 say "Another one guess the number #{answer}!"
                 break
